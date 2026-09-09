@@ -93,9 +93,13 @@ namespace Gmsh
 
     dealii::OpenCASCADE::write_IGES(boundary, iges_file_name);
 
+    // Gmsh resolves paths in Merge statements relative to the .geo file.
+    const std::string iges_file_name_in_geo =
+      std::filesystem::path(iges_file_name).filename().generic_string();
+
     std::ofstream geofile;
     geofile.open(geo_file_name);
-    geofile << "Merge \"" << iges_file_name << "\";" << std::endl
+    geofile << "Merge \"" << iges_file_name_in_geo << "\";" << std::endl
             << "Line Loop (2) = {1};" << std::endl
             << "Plane Surface (3) = {2};" << std::endl
             << "Characteristic Length { 1 } = " << prm.characteristic_length
